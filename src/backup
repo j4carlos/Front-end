@@ -1,0 +1,186 @@
+applicationProperties
+    spring.jpa.hibernate.ddl-auto=update
+    spring.datasource.url=jdbc:mysql://localhost:3306/backend?useSSL=false&serverTimezone=UTC
+    spring.datasource.username=root
+    spring.datasource.password=
+    spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+
+Entity
+package com.portfolio.jcarlos.Entity;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ *
+ * @author Carlos
+ */
+@Getter @Setter
+@Entity
+public class Persona {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @NotNull
+    @Size(min = 1, max = 50, message = "Se debe ingresar al menos un caracter y hasta 50")
+    private String nombre;
+    
+    @NotNull
+    @Size(min = 1, max = 50, message = "Se debe ingresar al menos un caracter y hasta 50")
+    private String apellido;
+    
+    @Size(min = 1, max = 50, message = "Se debe ingresar al menos un caracter y hasta 50")
+    private String img;
+
+}
+
+Repository
+package com.portfolio.jcarlos.Repository;
+
+import com.portfolio.jcarlos.Entity.Persona;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ *
+ * @author Carlos
+ */
+@Repository
+public interface IPersonaRepository extends JpaRepository<Persona,Long>  {
+    
+}
+
+Interface
+package com.portfolio.jcarlos.Interface;
+
+import com.portfolio.jcarlos.Entity.Persona;
+import java.util.List;
+
+/**
+ *
+ * @author Carlos
+ */
+
+public interface IPersonaService {
+
+    public List<Persona> getPersona();
+    
+    public void  savePersona(Persona persona);
+    
+    public void deletePersona(Long id);
+    
+    public Persona findPersona(Long id);
+}
+
+Service
+package com.portfolio.jcarlos.Service;
+
+import com.portfolio.jcarlos.Entity.Persona;
+import com.portfolio.jcarlos.Interface.IPersonaService;
+import com.portfolio.jcarlos.Repository.IPersonaRepository;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ *
+ * @author Carlos
+ */
+@Service
+public class ImpPersonaService implements IPersonaService{
+    @Autowired IPersonaRepository ipersonaRepository;
+    
+    @Override
+    public List<Persona> getPersona() {
+        List<Persona> persona = ipersonaRepository.findAll();
+        return persona;
+    }
+
+    @Override
+    public void savePersona(Persona persona) {
+        ipersonaRepository.save(persona);
+    }
+
+    @Override
+    public void deletePersona(Long id) {
+        ipersonaRepository.deleteById(id);
+    }
+
+    @Override
+    public Persona findPersona(Long id) {
+        Persona persona = ipersonaRepository.findById(id).orElse(null);
+        return persona;
+    }
+    
+}
+
+Controller
+package com.portfolio.jcarlos.Controller;
+
+import com.portfolio.jcarlos.Entity.Persona;
+import com.portfolio.jcarlos.Interface.IPersonaService;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ *
+ * @author Carlos
+ */
+@RestController
+@CrossOrigin(origins="http://localhost:4200")
+public class PersonaController {
+    @Autowired IPersonaService ipersonaService;
+    
+    @GetMapping("/personas/traer")
+    public List<Persona> getPersona(){
+        return ipersonaService.getPersona();
+    }
+    
+    @GetMapping("/personas/traer/perfil")
+    public Persona findPersona(){
+        return ipersonaService.findPersona((long)1);
+    }
+    
+    @PostMapping("/personas/crear")
+    public String createPersona(@RequestBody Persona persona){
+        ipersonaService.savePersona(persona);
+        return "Persona creada con exito";
+    }
+    
+    @DeleteMapping("/personas/borrar/{id}")
+    public String deletePersona(@PathVariable Long id){
+        ipersonaService.deletePersona(id);
+        return "Persona borrada con exito";
+    }
+    
+    @PutMapping("/personas/editar/{id}")
+    public Persona editPersona(@PathVariable Long id,
+                            @RequestParam("nombre") String nuevoNombre,
+                            @RequestParam("apellido") String nuevoApellido,
+                            @RequestParam("img") String nuevoImg){
+        Persona persona = ipersonaService.findPersona(Long.MIN_VALUE);
+        
+        persona.setNombre(nuevoNombre);
+        persona.setApellido(nuevoApellido);
+        persona.setImg(nuevoImg);
+        
+        ipersonaService.savePersona(persona);
+        return persona;
+    }
+}

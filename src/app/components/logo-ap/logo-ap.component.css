@@ -1,0 +1,18 @@
+.fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logoAP {
+    width: 150px;
+}
+
+img {
+    width: 50px;
+    margin: 2px;
+}
+
+.btn{
+    margin: 2px;
+}

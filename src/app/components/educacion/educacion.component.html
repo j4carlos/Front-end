@@ -1,0 +1,24 @@
+<!-- <div class="container"> -->
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <h1>Educacion</h1>
+            <button class="btn btn-success" routerLink="/nuevaedu"><i class="bi bi-plus-lg"> </i> </button>
+        </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-11">
+            <ul>
+                <li *ngFor="let Educacion of educacion">
+                    <div class="d-flex justify-content-between">
+                        <h2>{{Educacion.nombreEdu}} </h2>
+                        <div>
+                            <button class="btn btn-secondary" routerLink="/editedu/{{Educacion.id}}"><i class="bi bi-pencil-fill"> </i></button>
+                            <button class="btn btn-danger" (click)="delete(Educacion.id)"><i class="bi bi-trash-fill"> </i></button>
+                        </div>
+                    </div>
+                    <p>{{Educacion.descripcionEdu}}</p>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+<!-- </div> -->

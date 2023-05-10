@@ -1,0 +1,23 @@
+<!--<div class="container">-->
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <h1>Experiencia</h1>
+            <button class="btn btn-success" routerLink="/nuevaexp"><i class="bi bi-plus-lg"> </i> </button>
+        </div>
+        <div class="col-lg-1"></div>
+            <div class="col-lg-11">
+                    <ul>
+                        <li *ngFor="let Experiencia of experiencia">
+                            <div class="d-flex justify-content-between">
+                                <h2>{{Experiencia.nombreExp}} </h2>
+                                <div>
+                                    <button class="btn btn-secondary" routerLink="/editexp/{{Experiencia.id}}"><i class="bi bi-pencil-fill"> </i></button>
+                                    <button class="btn btn-danger" (click)="delete(Experiencia.id)"><i class="bi bi-trash-fill"> </i></button>
+                                </div>
+                            </div>
+                            <p>{{Experiencia.descripcionExp}}</p>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+<!-- </div> -->

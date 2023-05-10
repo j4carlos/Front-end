@@ -1,0 +1,24 @@
+<!-- <div class="container"> -->
+    <div class="row">
+        <div class="d-flex justify-content-between">
+            <h1>Proyectos realizados</h1>
+            <button class="btn btn-success" routerLink="/nuevoproyecto"><i class="bi bi-plus-lg"> </i> </button>
+        </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-11">
+            <ul>
+                <li *ngFor="let Proyectos of proyectos">
+                    <div class="d-flex justify-content-between">
+                        <h2>{{Proyectos.nombreP}} </h2>
+                        <div>
+                            <button class="btn btn-secondary" routerLink="/editproyec/{{Proyectos.id}}"><i class="bi bi-pencil-fill"> </i></button>
+                            <button class="btn btn-danger" (click)="delete(Proyectos.id)"><i class="bi bi-trash-fill"> </i></button>
+                        </div>
+                    </div>
+                    <p>{{Proyectos.descripcionP}}</p>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+<!-- </div> -->
